@@ -8,11 +8,18 @@ import pandas as pd
 import ta
 import difflib
 
-# Load .env variables
-load_dotenv()
-api_key = os.getenv("TOGETHER_API_KEY")
-news_api_key = os.getenv("NEWSDATA_API_KEY")
-fmp_api_key = os.getenv("FMP_API_KEY")
+# Secret loading function
+def get_secret(key):
+    if "STREAMLIT_ENV" in os.environ:  # Check if we're on Streamlit Cloud
+        return st.secrets[key]
+    else:
+        load_dotenv()  # Load .env variables for local development
+        return os.getenv(key)
+
+# Load API keys
+api_key = get_secret("TOGETHER_API_KEY")
+news_api_key = get_secret("NEWSDATA_API_KEY")
+fmp_api_key = get_secret("FMP_API_KEY")
 
 st.title("💼 AI Stock Advisor (News + Technicals)")
 
